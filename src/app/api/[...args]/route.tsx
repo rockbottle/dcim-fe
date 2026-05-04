@@ -13,7 +13,6 @@ async function proxyHandler(
 
   // 3. Get the Internal Backend URL
   const backendBaseUrl = process.env.BACKEND_URL || "http://dcim-be:8000";
-
   // 4. Construct the full internal URL Safely
   // This regex ensures we only have ONE slash between the base and the path
   const cleanBase = backendBaseUrl.replace(/\/+$/, "");
