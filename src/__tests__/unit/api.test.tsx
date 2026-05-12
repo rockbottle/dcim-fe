@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it } from "vitest";
 // Import your utility functions or specific logic from api.tsx here
 
 describe("API State Logic", () => {
