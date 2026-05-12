@@ -12,14 +12,13 @@ interface GaugeProps {
 
 const GaugeChart = ({ label, value, max, color }: GaugeProps) => {
   // Data: [Value, Remaining Space]
-  const data = [
-    { value: value },
-    { value: max - value },
-  ];
+  const data = [{ value: value }, { value: max - value }];
 
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
-      <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase">{label}</h3>
+      <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase">
+        {label}
+      </h3>
       <div className="h-40 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -35,7 +34,8 @@ const GaugeChart = ({ label, value, max, color }: GaugeProps) => {
               dataKey="value"
             >
               <Cell key="cell-0" fill={color} />
-              <Cell key="cell-1" fill="#e5e7eb" /> {/* Gray background for "empty" part */}
+              <Cell key="cell-1" fill="#e5e7eb" />{" "}
+              {/* Gray background for "empty" part */}
             </Pie>
           </PieChart>
         </ResponsiveContainer>

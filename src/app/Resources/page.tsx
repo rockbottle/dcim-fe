@@ -101,7 +101,7 @@ const ResourceGauge = ({
 
 export default function ResourcesPage() {
   const [currentView, setCurrentView] = useState<"dashboard" | "purchase">(
-    "dashboard",
+    "dashboard"
   );
   const [formData, setFormData] = useState({
     dcpower: 1,
@@ -147,22 +147,22 @@ export default function ResourcesPage() {
         power:
           devices?.reduce(
             (acc: number, d: Device) => acc + (d.device_power || 0),
-            0,
+            0
           ) ?? 0,
         nport:
           devices?.reduce(
             (acc: number, d: Device) => acc + (d.device_nports || 0),
-            0,
+            0
           ) ?? 0,
         sport:
           devices?.reduce(
             (acc: number, d: Device) => acc + (d.device_sports || 0),
-            0,
+            0
           ) ?? 0,
         uspace:
           devices?.reduce(
             (acc: number, d: Device) => acc + (Number(d.rack_uspace) || 0),
-            0,
+            0
           ) ?? 0,
       },
       purchased: {
@@ -172,13 +172,13 @@ export default function ResourcesPage() {
         uspace: myDetails?.uspace || 0,
       },
     }),
-    [devices, myDetails],
+    [devices, myDetails]
   );
 
   const handleCleanup = async () => {
     if (
       window.confirm(
-        "WARNING: This will permanently delete your company usage record. This action cannot be undone. Proceed?",
+        "WARNING: This will permanently delete your company usage record. This action cannot be undone. Proceed?"
       )
     ) {
       try {
@@ -187,7 +187,7 @@ export default function ResourcesPage() {
         refetchDetails();
       } catch (err: any) {
         alert(
-          `Backend Error: ${err?.data?.detail || "Failed to delete usage record"}`,
+          `Backend Error: ${err?.data?.detail || "Failed to delete usage record"}`
         );
       }
     }

@@ -60,7 +60,7 @@ const SidebarLink = ({
 const Sidebar = () => {
   const dispatch = useAppDispatch();
   const isSidebarCollapsed = useAppSelector(
-    (state) => state.global.isSidebarCollapsed,
+    (state) => state.global.isSidebarCollapsed
   );
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
@@ -72,7 +72,7 @@ const Sidebar = () => {
     const fetchBeIdentity = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/health/healthz`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/health/healthz`
         );
         if (response.ok) {
           const data = await response.json();

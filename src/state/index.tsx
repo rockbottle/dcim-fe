@@ -22,12 +22,14 @@ export const globalSlice = createSlice({
     setIsDarkMode: (state, action: PayloadAction<boolean>) => {
       state.isDarkMode = action.payload;
     },
-    setSearchTerm: (state, action) => { // Add this reducer
+    setSearchTerm: (state, action) => {
+      // Add this reducer
       state.searchTerm = action.payload;
     },
   },
 });
 
-export const { setIsSidebarCollapsed, setIsDarkMode, setSearchTerm } = globalSlice.actions;
+export const { setIsSidebarCollapsed, setIsDarkMode, setSearchTerm } =
+  globalSlice.actions;
 
 export default globalSlice.reducer;

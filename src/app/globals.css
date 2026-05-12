@@ -8,14 +8,17 @@
   box-sizing: border-box;
 }
 
-html, body, #root, .app {
+html,
+body,
+#root,
+.app {
   height: 100%;
   width: 100%;
   @apply text-sm transition-colors duration-300;
   @apply bg-gray-100 text-gray-900; /* Light Mode Defaults */
 }
 
-.dark html, 
+.dark html,
 .dark body {
   @apply bg-[#080b12] text-gray-100; /* Dark Mode Defaults */
 }

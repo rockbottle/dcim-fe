@@ -172,19 +172,19 @@ const Dashboard = () => {
         devices: devices.length,
         uspace: devices.reduce(
           (acc: number, d: Device) => acc + (Number(d.rack_uspace) || 0),
-          0,
+          0
         ),
         power: devices.reduce(
           (acc: number, d: Device) => acc + (Number(d.device_power) || 0),
-          0,
+          0
         ),
         nports: devices.reduce(
           (acc: number, d: Device) => acc + (Number(d.device_nports) || 0),
-          0,
+          0
         ),
         sports: devices.reduce(
           (acc: number, d: Device) => acc + (Number(d.device_sports) || 0),
-          0,
+          0
         ),
       },
       limits: {

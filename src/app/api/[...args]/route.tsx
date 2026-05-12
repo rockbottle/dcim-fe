@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 async function proxyHandler(
   req: NextRequest,
   // Note: params is now a Promise in Next.js 15
-  { params }: { params: Promise<{ args: string[] }> },
+  { params }: { params: Promise<{ args: string[] }> }
 ) {
   // 1. Await the params before using them
   const resolvedParams = await params;
@@ -57,7 +57,7 @@ async function proxyHandler(
     console.error("Internal Proxy Error:", error);
     return NextResponse.json(
       { message: "Could not connect to internal backend service" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

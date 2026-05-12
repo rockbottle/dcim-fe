@@ -169,7 +169,7 @@ const Inventory = () => {
         device.device_hostname
           .toLowerCase()
           .includes(searchTarget.toLowerCase()) ||
-        device.device_model.toLowerCase().includes(searchTarget.toLowerCase()),
+        device.device_model.toLowerCase().includes(searchTarget.toLowerCase())
     );
   }, [devices, searchTarget]);
 
@@ -178,22 +178,22 @@ const Inventory = () => {
     () => ({
       assets: (devices as Device[]).reduce(
         (acc, d) => acc + (Number(d.rack_uspace) || 0),
-        0,
+        0
       ),
       power: (devices as Device[]).reduce(
         (acc, d) => acc + (Number(d.device_power) || 0),
-        0,
+        0
       ),
       nports: (devices as Device[]).reduce(
         (acc, d) => acc + (Number(d.device_nports) || 0),
-        0,
+        0
       ),
       sports: (devices as Device[]).reduce(
         (acc, d) => acc + (Number(d.device_sports) || 0),
-        0,
+        0
       ),
     }),
-    [devices],
+    [devices]
   );
 
   const limits = useMemo(() => {
@@ -506,7 +506,7 @@ const Inventory = () => {
                     <button
                       onClick={() =>
                         setOpenMenuId(
-                          openMenuId === device.id ? null : device.id,
+                          openMenuId === device.id ? null : device.id
                         )
                       }
                       className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-all"

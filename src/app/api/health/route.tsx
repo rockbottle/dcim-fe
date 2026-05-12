@@ -13,7 +13,7 @@ export async function GET(request: Request) {
         pod_name: process.env.NEXT_PUBLIC_MY_POD_NAME || "unknown",
         node_name: process.env.NEXT_PUBLIC_MY_NODE_NAME || "unknown",
       },
-      { status: 200 },
+      { status: 200 }
     );
   }
 
@@ -29,7 +29,7 @@ export async function GET(request: Request) {
   } catch (error) {
     return NextResponse.json(
       { status: "DOWN", error: (error as Error).message },
-      { status: 503 },
+      { status: 503 }
     );
   }
 }

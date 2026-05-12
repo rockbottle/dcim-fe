@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_DB: dcim
+      # K8s logic: Code looks for a file mount here
+      POSTGRES_PASSWORD_FILE: /etc/postgres-secrets/postgres_password
+    volumes:
+      # We create a local file to act as the K8s Secret
+      - ./e2e-secrets/db_pass.txt:/etc/postgres-secrets/postgres_password:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d dcim"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: pramoneo/dcim-be:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Matches your K8s 'dcim-be-db-url' secret logic
+      DATABASE_URL: postgresql://admin:testpass@db:5432/dcim
+    volumes:
+      # K8s logic: Code looks for JWT key at /run/secrets/
+      - ./e2e-secrets/jwt_key.txt:/run/secrets/JWT_SECRET_KEY:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/readyz"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Mimics the ConfigMap 'dcim-fe-next-config'
+        NEXT_PUBLIC_API_BASE_URL: http://backend:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      # Mimics the .env.local mount
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000

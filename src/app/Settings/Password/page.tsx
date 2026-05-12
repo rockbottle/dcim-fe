@@ -11,26 +11,32 @@ const Password = () => {
     newPassword: "",
     confirmPassword: "",
   });
-  const [status, setStatus] = useState<{ type: 'success' | 'error' | null, message: string }>({
+  const [status, setStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({
     type: null,
-    message: ""
+    message: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (formData.newPassword !== formData.confirmPassword) {
-      setStatus({ type: 'error', message: "New passwords do not match." });
+      setStatus({ type: "error", message: "New passwords do not match." });
       return;
     }
 
     if (formData.newPassword.length < 8) {
-      setStatus({ type: 'error', message: "Password must be at least 8 characters." });
+      setStatus({
+        type: "error",
+        message: "Password must be at least 8 characters.",
+      });
       return;
     }
 
     // Trigger your API call here
-    setStatus({ type: 'success', message: "Password updated successfully!" });
+    setStatus({ type: "success", message: "Password updated successfully!" });
     setFormData({ currentPassword: "", newPassword: "", confirmPassword: "" });
   };
 
@@ -44,35 +50,47 @@ const Password = () => {
           </div>
           <div>
             <h1 className="text-xl font-bold">Security</h1>
-            <p className="text-slate-400 text-sm">Manage your account password</p>
+            <p className="text-slate-400 text-sm">
+              Manage your account password
+            </p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 space-y-5">
           {/* Status Message */}
           {status.type && (
-            <div className={`flex items-center gap-3 p-4 rounded-lg text-sm font-medium animate-in fade-in zoom-in-95 ${
-              status.type === 'success' 
-                ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400" 
-                : "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400"
-            }`}>
-              {status.type === 'success' ? <ShieldCheck size={18} /> : <AlertCircle size={18} />}
+            <div
+              className={`flex items-center gap-3 p-4 rounded-lg text-sm font-medium animate-in fade-in zoom-in-95 ${
+                status.type === "success"
+                  ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                  : "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400"
+              }`}
+            >
+              {status.type === "success" ? (
+                <ShieldCheck size={18} />
+              ) : (
+                <AlertCircle size={18} />
+              )}
               {status.message}
             </div>
           )}
 
           {/* Current Password */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Current Password</label>
+            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Current Password
+            </label>
             <div className="relative">
               <input
                 type={showCurrent ? "text" : "password"}
                 required
                 className="w-full pl-4 pr-12 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 value={formData.currentPassword}
-                onChange={(e) => setFormData({...formData, currentPassword: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, currentPassword: e.target.value })
+                }
               />
-              <button 
+              <button
                 type="button"
                 onClick={() => setShowCurrent(!showCurrent)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
@@ -86,16 +104,20 @@ const Password = () => {
 
           {/* New Password */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">New Password</label>
+            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              New Password
+            </label>
             <div className="relative">
               <input
                 type={showNew ? "text" : "password"}
                 required
                 className="w-full pl-4 pr-12 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 value={formData.newPassword}
-                onChange={(e) => setFormData({...formData, newPassword: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, newPassword: e.target.value })
+                }
               />
-              <button 
+              <button
                 type="button"
                 onClick={() => setShowNew(!showNew)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
@@ -107,13 +129,17 @@ const Password = () => {
 
           {/* Confirm New Password */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Confirm New Password</label>
+            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Confirm New Password
+            </label>
             <input
               type="password"
               required
               className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               value={formData.confirmPassword}
-              onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, confirmPassword: e.target.value })
+              }
             />
           </div>
 

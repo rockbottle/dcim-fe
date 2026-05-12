@@ -4,18 +4,17 @@ import React, { useEffect, useState } from "react";
 import Navbar from "@/app/(components)/Navbar";
 import Sidebar from "@/app/(components)/Sidebar";
 import StoreProvider, { useAppSelector } from "@/app/redux";
-import { usePathname, useRouter } from "next/navigation"; 
-import { 
-  useGetInventoryQuery, 
-  useGetMyDetailsQuery 
-} from "@/state/api";
+import { usePathname, useRouter } from "next/navigation";
+import { useGetInventoryQuery, useGetMyDetailsQuery } from "@/state/api";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isAuthChecked, setIsAuthChecked] = useState(false);
 
-  const isSidebarCollapsed = useAppSelector((state) => state.global.isSidebarCollapsed);
+  const isSidebarCollapsed = useAppSelector(
+    (state) => state.global.isSidebarCollapsed
+  );
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
   const isAuthPage = pathname === "/Login" || pathname === "/login";
@@ -34,11 +33,11 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   }, [pathname, isAuthPage, router]);
 
   // Data fetching (only runs if authenticated AND not on login page)
-  const { isFetching: isInvFetching } = useGetInventoryQuery(undefined, { 
-    skip: isAuthPage || !isAuthChecked 
+  const { isFetching: isInvFetching } = useGetInventoryQuery(undefined, {
+    skip: isAuthPage || !isAuthChecked,
   });
-  const { isFetching: isDetFetching } = useGetMyDetailsQuery(undefined, { 
-    skip: isAuthPage || !isAuthChecked 
+  const { isFetching: isDetFetching } = useGetMyDetailsQuery(undefined, {
+    skip: isAuthPage || !isAuthChecked,
   });
 
   const isGlobalLoading = isInvFetching || isDetFetching;
@@ -53,13 +52,15 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   // 1. Prevent "Flicker": Don't show anything until we know the auth status
   if (!isAuthChecked && !isAuthPage) {
-    return <div className="h-screen w-screen bg-gray-50 dark:bg-dark-bg" />; 
+    return <div className="h-screen w-screen bg-gray-50 dark:bg-dark-bg" />;
   }
 
   // 2. Clean return for Login page
   if (isAuthPage) {
     return (
-      <div className={`${isDarkMode ? "dark" : "light"} w-full min-h-screen bg-gray-50 dark:bg-dark-bg`}>
+      <div
+        className={`${isDarkMode ? "dark" : "light"} w-full min-h-screen bg-gray-50 dark:bg-dark-bg`}
+      >
         {children}
       </div>
     );
@@ -67,18 +68,20 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   // 3. Protected Dashboard Layout
   return (
-    <div className={`${isDarkMode ? "dark" : "light"} flex bg-gray-50 text-gray-900 w-full min-h-screen`}>
+    <div
+      className={`${isDarkMode ? "dark" : "light"} flex bg-gray-50 text-gray-900 w-full min-h-screen`}
+    >
       <Sidebar />
-      <main className={`flex flex-col w-full h-full py-7 px-9 bg-gray-50 dark:bg-dark-bg ${isSidebarCollapsed ? "md:pl-24" : "md:pl-72"}`}>
+      <main
+        className={`flex flex-col w-full h-full py-7 px-9 bg-gray-50 dark:bg-dark-bg ${isSidebarCollapsed ? "md:pl-24" : "md:pl-72"}`}
+      >
         <Navbar />
         {isGlobalLoading && (
           <div className="fixed top-0 left-0 w-full h-1 bg-blue-500/20 z-[9999]">
             <div className="h-full bg-blue-600 animate-pulse w-1/3" />
           </div>
         )}
-        <div className="mt-4">
-          {children}
-        </div>
+        <div className="mt-4">{children}</div>
       </main>
     </div>
   );

@@ -6,7 +6,7 @@ import { User, Mail, CheckCircle, Save } from "lucide-react";
 
 const Profile = () => {
   // Current user data (Hardcoded as per your original file)
-  const currentUser = { name: "Pramod", email: "pramod@example.com" }; 
+  const currentUser = { name: "Pramod", email: "pramod@example.com" };
 
   const [name, setName] = useState(currentUser.name);
   const [email, setEmail] = useState(currentUser.email);
@@ -25,7 +25,9 @@ const Profile = () => {
         {/* Header */}
         <div className="bg-blue-600 p-6 text-white">
           <h1 className="text-xl font-bold">Account Settings</h1>
-          <p className="text-blue-100 text-sm">Update your personal information</p>
+          <p className="text-blue-100 text-sm">
+            Update your personal information
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 space-y-6">

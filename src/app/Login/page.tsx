@@ -3,26 +3,36 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLoginMutation, useCreateUserMutation } from "@/state/api"; // Added createUser
-import { Lock, Mail, Loader2, ShieldCheck, AlertCircle, Building2, UserPlus, LogIn } from "lucide-react";
+import {
+  Lock,
+  Mail,
+  Loader2,
+  ShieldCheck,
+  AlertCircle,
+  Building2,
+  UserPlus,
+  LogIn,
+} from "lucide-react";
 
 const LoginPage = () => {
   const router = useRouter();
-  
+
   // Toggle between Login and Registration
   const [isRegistering, setIsRegistering] = useState(false);
-  
+
   // Form State
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
-  
+
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   // API Mutations
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
-  const [createUser, { isLoading: isRegisterLoading }] = useCreateUserMutation();
+  const [createUser, { isLoading: isRegisterLoading }] =
+    useCreateUserMutation();
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,13 +48,13 @@ const LoginPage = () => {
           password,
           company_name: companyName, // Backend uses this for unique company ID logic
         }).unwrap();
-        
+
         setSuccessMessage("Account created! You can now login.");
         setIsRegistering(false); // Move user to login view
       } else {
         // --- LOGIN LOGIC ---
         const response = await login({ username, password }).unwrap();
-        
+
         localStorage.setItem("auth_token", response.access_token);
         localStorage.setItem("username", response.username);
         localStorage.setItem("user_id", response.user_id);
@@ -52,7 +62,8 @@ const LoginPage = () => {
         router.push("/dashboard");
       }
     } catch (err: any) {
-      const msg = err.data?.detail || "Action failed. Please check backend connection.";
+      const msg =
+        err.data?.detail || "Action failed. Please check backend connection.";
       setErrorMessage(typeof msg === "string" ? msg : "An error occurred");
     }
   };
@@ -71,7 +82,9 @@ const LoginPage = () => {
               {isRegistering ? "Create Account" : "DCIM Portal"}
             </h1>
             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">
-              {isRegistering ? "Join the Inventory System" : "Authorized Access Only"}
+              {isRegistering
+                ? "Join the Inventory System"
+                : "Authorized Access Only"}
             </p>
           </div>
 
@@ -90,11 +103,17 @@ const LoginPage = () => {
 
             {/* Username Field */}
             <div>
-              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 block ml-1">Username</label>
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 block ml-1">
+                Username
+              </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Mail
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
                 <input
-                  type="text" required
+                  type="text"
+                  required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
@@ -106,11 +125,17 @@ const LoginPage = () => {
             {/* Email Field (Registration Only) */}
             {isRegistering && (
               <div>
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 block ml-1">Email Address</label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 block ml-1">
+                  Email Address
+                </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                  <Mail
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
                   <input
-                    type="email" required
+                    type="email"
+                    required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
@@ -123,11 +148,17 @@ const LoginPage = () => {
             {/* Company Name Field (Registration Only) */}
             {isRegistering && (
               <div>
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 block ml-1">Company Name</label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 block ml-1">
+                  Company Name
+                </label>
                 <div className="relative">
-                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                  <Building2
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
                   <input
-                    type="text" required
+                    type="text"
+                    required
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
@@ -139,11 +170,17 @@ const LoginPage = () => {
 
             {/* Password Field */}
             <div>
-              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 block ml-1">Password</label>
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5 block ml-1">
+                Password
+              </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Lock
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
                 <input
-                  type="password" required
+                  type="password"
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-xl dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
@@ -160,9 +197,13 @@ const LoginPage = () => {
               {isLoading ? (
                 <Loader2 className="animate-spin" size={18} />
               ) : isRegistering ? (
-                <><UserPlus size={18} /> Register Account</>
+                <>
+                  <UserPlus size={18} /> Register Account
+                </>
               ) : (
-                <><LogIn size={18} /> Initialize Session</>
+                <>
+                  <LogIn size={18} /> Initialize Session
+                </>
               )}
             </button>
           </form>
@@ -178,7 +219,9 @@ const LoginPage = () => {
               }}
               className="text-[10px] font-black text-gray-500 hover:text-blue-600 uppercase tracking-[0.2em] transition-colors"
             >
-              {isRegistering ? "Already have an account? Login" : "Need a new account? Register"}
+              {isRegistering
+                ? "Already have an account? Login"
+                : "Need a new account? Register"}
             </button>
           </div>
         </div>

@@ -3,4 +3,13 @@ Dockerfile
 README.md
 .git
 .next
-
+.vitest
+coverage
+test-results
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log

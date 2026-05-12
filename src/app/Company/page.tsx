@@ -22,19 +22,19 @@ import {
   Key,
 } from "lucide-react";
 
-// --- NEW: Define the User Interface ---
+// --- Define the User Interface ---
 interface User {
-  id?: number; // Make this optional to match api.tsx
+  id?: number;
   username: string;
   email: string;
-  company_name: string; // Remove the '?' to make it match api.tsx
+  company_name: string;
 }
 
 const Company = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // --- ADDED: States for the Update Modal ---
+  // States for the Update Modal
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [userToUpdate, setUserToUpdate] = useState<User | null>(null);
 
@@ -46,15 +46,13 @@ const Company = () => {
   const { data: currentUserData } = useGetCurrentUserQuery();
   const [createUser] = useCreateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
-  // Ensure useUpdateUserMutation is imported from your api.ts
   const [updateUser] = useUpdateUserMutation();
 
-  // --- ADDED: Force refresh on mount to clear old cache ---
+  // Force refresh on mount
   useEffect(() => {
     refetch();
   }, [refetch]);
 
-  // FIX: Accessing the user safely
   const currentUser = Array.isArray(currentUserData)
     ? currentUserData[0]
     : currentUserData;
@@ -72,7 +70,7 @@ const Company = () => {
   const filteredUsers = team.filter(
     (user: User) =>
       user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()),
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleCreateUser = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -90,7 +88,6 @@ const Company = () => {
       setIsModalOpen(false);
       refetch();
     } catch (_err) {
-      // FIX: Prefixed with underscore to satisfy linter
       alert("Failed to create user. Check if username/email already exists.");
     }
   };
@@ -107,11 +104,6 @@ const Company = () => {
           refetch();
         }
       } catch (err: any) {
-        /**
-         * FIX: We extract the 'detail' message from the backend response.
-         * This will now show: "Cannot delete user as usage record exists..."
-         * instead of the incorrect "numeric ID" message.
-         */
         const errorMessage =
           err?.data?.detail || "Delete failed. Please check backend logs.";
         alert(errorMessage);
@@ -224,7 +216,7 @@ const Company = () => {
                     <button
                       onClick={() =>
                         setOpenMenuId(
-                          openMenuId === user.username ? null : user.username,
+                          openMenuId === user.username ? null : user.username
                         )
                       }
                       className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-gray-500"
@@ -284,10 +276,17 @@ const Company = () => {
                   Registration will require email verification
                 </p>
               </div>
-              <X
-                className="cursor-pointer dark:text-gray-400 hover:text-red-500 transition-colors"
+              {/* FIX: Wrap X in a button with data-testid to ensure test compatibility */}
+              <button
+                data-testid="close-icon"
                 onClick={() => setIsModalOpen(false)}
-              />
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X
+                  className="dark:text-gray-400 hover:text-red-500"
+                  size={20}
+                />
+              </button>
             </div>
 
             <form className="space-y-4" onSubmit={handleCreateUser}>
@@ -352,7 +351,8 @@ const Company = () => {
           </div>
         </div>
       )}
-      {/* --- UPDATE USER MODAL --- */}
+
+      {/* UPDATE USER MODAL */}
       {isUpdateModalOpen && userToUpdate && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
           <div
@@ -364,10 +364,15 @@ const Company = () => {
               <h2 className="text-xl font-black dark:text-white uppercase tracking-tight">
                 Update Profile
               </h2>
-              <X
-                className="cursor-pointer dark:text-gray-400 hover:text-red-500"
+              <button
                 onClick={() => setIsUpdateModalOpen(false)}
-              />
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X
+                  className="dark:text-gray-400 hover:text-red-500"
+                  size={20}
+                />
+              </button>
             </div>
 
             <form
@@ -379,8 +384,8 @@ const Company = () => {
                   await updateUser({
                     id: userToUpdate.id,
                     email: formData.get("email") as string,
-                    username: userToUpdate.username, // Keep existing
-                    company_name: userToUpdate.company_name, // Keep existing
+                    username: userToUpdate.username,
+                    company_name: userToUpdate.company_name,
                   }).unwrap();
                   setIsUpdateModalOpen(false);
                   refetch();
