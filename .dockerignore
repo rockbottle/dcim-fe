@@ -13,3 +13,7 @@ __pycache__
 *.db
 *.sqlite3
 *.log
+playwright.config.ts
+playwright-report/
+test-results/
+src/__tests__/e2e/
