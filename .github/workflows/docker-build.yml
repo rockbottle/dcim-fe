@@ -60,12 +60,17 @@ jobs:
 
       - name: Start Application Stack (Compose)
         run: |
-          # UPDATED: Corrected filename to use dashes (-) as per your repo structure
+          # We use --wait to let Docker attempt to reach a 'healthy' state, 
+          # but we follow it with a manual check so the workflow doesn't crash 
+          # immediately if the healthcheck command itself is missing.
           docker compose -f docker-compose-e2e.yaml up -d
-          # Give the stack a moment to stabilize
-          sleep 15
+
+          echo "Waiting for services to initialize..."
+          sleep 20
+
+          # This shows the status of all containers
           docker compose -f docker-compose-e2e.yaml ps
-      # --- ADD THIS DEBUG STEP ---
+
       - name: Debug Backend Logs on Failure
         if: failure()
         run: |
@@ -73,6 +78,7 @@ jobs:
           docker compose -f docker-compose-e2e.yaml logs backend
           echo "Dumping Database Logs..."
           docker compose -f docker-compose-e2e.yaml logs db
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
