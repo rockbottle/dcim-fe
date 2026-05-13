@@ -1,1 +1,4 @@
-"results.sarif"
+results.sarif
+.next
+node_modules
+dist

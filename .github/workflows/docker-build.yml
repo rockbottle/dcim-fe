@@ -35,6 +35,7 @@ jobs:
       - name: Run Lint & Format
         run: |
           npm run lint -- --max-warnings 100
+          rm -f results.sarif
           npx prettier --check .
 
       - name: Run Unit Tests (Vitest)
