@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import Dashboard from "@/app/dashboard/page";
 import { renderWithProviders } from "@/__tests__/utils/test-utils";
 import { vi } from "vitest";

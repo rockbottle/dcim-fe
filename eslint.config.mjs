@@ -17,12 +17,20 @@ const eslintConfig = [
   ),
   {
     rules: {
-      // Turn these from "Error" to "Warn" so the build doesn't fail
+      // Allows 'any' types but flags them as warnings for visibility
       "@typescript-eslint/no-explicit-any": "warn",
+
+      // Comprehensive rule to ignore unused variables if they are prefixed with '_'
       "@typescript-eslint/no-unused-vars": [
         "warn",
-        { argsIgnorePattern: "^_" },
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_", // Specifically handles your 'catch (_err)' logic
+        },
       ],
+
+      // Enforces Prettier formatting; errors here will still stop the build
       "prettier/prettier": "error",
     },
   },

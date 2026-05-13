@@ -389,7 +389,7 @@ const Company = () => {
                   }).unwrap();
                   setIsUpdateModalOpen(false);
                   refetch();
-                } catch (_) {
+                } catch (_err) {
                   alert("Update failed.");
                 }
               }}
