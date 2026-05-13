@@ -51,7 +51,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Setup the "K8s-style" file secrets for Docker Compose mounts
       - name: Prepare E2E Secrets
         run: |
           mkdir -p e2e-secrets
@@ -60,23 +59,20 @@ jobs:
 
       - name: Start Application Stack (Compose)
         run: |
-          # We use --wait to let Docker attempt to reach a 'healthy' state, 
-          # but we follow it with a manual check so the workflow doesn't crash 
-          # immediately if the healthcheck command itself is missing.
+          # We use --quiet-pull to keep logs clean and -d to run in background
           docker compose -f docker-compose-e2e.yaml up -d
 
-          echo "Waiting for services to initialize..."
-          sleep 20
+          echo "Waiting 30 seconds for DB migrations and Uvicorn to stabilize..."
+          sleep 30
 
-          # This shows the status of all containers
+          # This will show us if containers are 'Up' regardless of health status
           docker compose -f docker-compose-e2e.yaml ps
 
-      - name: Debug Backend Logs on Failure
+      - name: Debug Stack on Failure
         if: failure()
         run: |
-          echo "Dumping Backend Logs..."
+          docker compose -f docker-compose-e2e.yaml ps
           docker compose -f docker-compose-e2e.yaml logs backend
-          echo "Dumping Database Logs..."
           docker compose -f docker-compose-e2e.yaml logs db
 
       - uses: actions/setup-node@v4
@@ -107,7 +103,6 @@ jobs:
       - name: Stop and Cleanup Stack
         if: always()
         run: |
-          # UPDATED: Corrected filename to use dashes (-)
           docker compose -f docker-compose-e2e.yaml down -v
           rm -rf e2e-secrets
 
