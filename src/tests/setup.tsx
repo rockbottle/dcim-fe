@@ -4,15 +4,23 @@ import React from "react";
 
 /**
  * 1. THE NUCLEAR FIX: Request/URL Constructor Alignment
- * This intercepts the Request constructor to fix the URLSearchParams
- * 'instanceof' mismatch before Node/Undici can throw a TypeError.
+ * This forces relative URLs to be absolute so Node/Undici doesn't crash.
+ * It also fixes the URLSearchParams 'instanceof' mismatch.
  */
 const NativeRequest = global.Request;
 global.Request = class Request extends NativeRequest {
   constructor(input: RequestInfo | URL, init?: RequestInit) {
+    let finalInput = input;
+
+    // Resolve relative URLs to localhost for the Node environment
+    if (typeof input === "string" && input.startsWith("/")) {
+      finalInput = `http://localhost:3000${input}`;
+    } else if (input instanceof URL && input.href.startsWith("/")) {
+      finalInput = new URL(input.href, "http://localhost:3000");
+    }
+
+    // Handle URLSearchParams 'instanceof' mismatch before Node rejects it
     if (init?.body && typeof init.body === "object") {
-      // If it's a URLSearchParams (from JSDOM), convert it to a string
-      // so the native Request constructor doesn't reject it.
       if (
         init.body.toString() === "[object URLSearchParams]" ||
         "append" in init.body
@@ -20,11 +28,12 @@ global.Request = class Request extends NativeRequest {
         init.body = init.body.toString();
       }
     }
-    super(input, init);
+
+    super(finalInput, init);
   }
 } as typeof NativeRequest;
 
-// Align global constructors
+// Align global constructors and JSDOM location
 if (typeof window !== "undefined") {
   Object.defineProperty(window, "location", {
     value: new URL("http://localhost:3000"),
@@ -39,9 +48,15 @@ if (typeof window !== "undefined") {
  */
 global.fetch = vi.fn(
   async (url: string | URL | Request, options?: RequestInit) => {
-    let urlString =
-      typeof url === "string" ? url : (url as any).url || url.toString();
+    let urlString = "";
 
+    if (url instanceof Request) {
+      urlString = url.url;
+    } else {
+      urlString = url.toString();
+    }
+
+    // Ensure we are matching against absolute URLs in our logic below
     if (urlString.startsWith("/")) {
       urlString = `http://localhost:3000${urlString}`;
     }
