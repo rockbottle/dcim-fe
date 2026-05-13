@@ -87,14 +87,11 @@ jobs:
         run: npm ci
 
       - name: Install Playwright CLI & Browsers
-        run: |
-          # Ensure the playwright test runner is available
-          npm install @playwright/test
-          npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Run E2E Tests
         # We point DIRECTLY to the folder to avoid Vitest conflicts
-        run: npx playwright test src/__tests__/e2e/full-lifecycle.spec.ts
+        run: npx playwright test
         env:
           BASE_URL: http://localhost:3000
           CI: true
