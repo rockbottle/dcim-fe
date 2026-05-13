@@ -65,7 +65,14 @@ jobs:
           # Give the stack a moment to stabilize
           sleep 15
           docker compose -f docker-compose-e2e.yaml ps
-
+      # --- ADD THIS DEBUG STEP ---
+      - name: Debug Backend Logs on Failure
+        if: failure()
+        run: |
+          echo "Dumping Backend Logs..."
+          docker compose -f docker-compose-e2e.yaml logs backend
+          echo "Dumping Database Logs..."
+          docker compose -f docker-compose-e2e.yaml logs db
       - uses: actions/setup-node@v4
         with:
           node-version: 22
